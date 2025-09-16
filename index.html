@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阿洞资讯服务</title>
+    <style>
+        :root {
+            --primary-blue: #1e88e5;
+            --dark-blue: #1565c0;
+            --light-blue: #e3f2fd;
+            --white: #ffffff;
+            --gray: #f5f5f5;
+            --text-dark: #333333;
+            --text-light: #757575;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--gray);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: var(--white);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .buttons-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            background-color: var(--white);
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .content-area {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 25px;
+            min-height: 400px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--light-blue);
+            border-top: 5px solid var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .content {
+            white-space: pre-wrap;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        .error {
+            color: #e53935;
+            text-align: center;
+            padding: 20px;
+            font-size: 1.2rem;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .buttons-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .buttons-container {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>阿洞资讯服务</h1>
+            <p class="subtitle">阿洞竭诚为您服务，快速获取最新热点资讯</p>
+        </header>
+        
+        <div class="buttons-container">
+            <button class="btn" data-api="https://60s.viki.moe/v2/60s?encoding=text">今日60S</button>
+            <button class="btn" data-api="https://60s.viki.moe/v2/weibo?encoding=text">微博热搜</button>
+            <button class="btn" data-api="https://60s.viki.moe/v2/zhihu?encoding=text">知乎热榜</button>
+            <button class="btn" data-api="https://60s.viki.moe/v2/toutiao?encoding=text">今日头条</button>
+            <button class="btn" data-api="https://60s.viki.moe/v2/baidu/realtime?encoding=text">百度热点</button>
+            <button class="btn" data-api="https://60s.viki.moe/v2/rednote?encoding=text">小红书热点</button>
+        </div>
+        
+        <div class="content-area">
+            <div class="loading" id="loading" style="display: none;">
+                <div class="spinner"></div>
+            </div>
+            <div class="content" id="content">
+                <p style="text-align: center; color: var(--text-light);">
+                    请点击上方按钮获取最新资讯
+                </p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 阿洞资讯服务 | 数据来源于网络</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.btn');
+            const contentElement = document.getElementById('content');
+            const loadingElement = document.getElementById('loading');
+            
+            buttons.forEach(button => {
+                button.addEventListener('click', async function() {
+                    const apiUrl = this.getAttribute('data-api');
+                    
+                    // 显示加载动画
+                    loadingElement.style.display = 'flex';
+                    contentElement.innerHTML = '';
+                    
+                    try {
+                        const response = await fetch(apiUrl);
+                        
+                        if (!response.ok) {
+                            throw new Error(`请求失败: ${response.status}`);
+                        }
+                        
+                        const textData = await response.text();
+                        
+                        // 处理文本数据，添加换行和样式
+                        const formattedText = textData
+                            .replace(/\n/g, '<br>')
+                            .replace(/\d+\./g, '<br><strong>$&</strong>');
+                        
+                        contentElement.innerHTML = formattedText;
+                    } catch (error) {
+                        console.error('获取数据出错:', error);
+                        contentElement.innerHTML = `<div class="error">获取数据失败，请稍后再试<br>${error.message}</div>`;
+                    } finally {
+                        // 隐藏加载动画
+                        loadingElement.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
